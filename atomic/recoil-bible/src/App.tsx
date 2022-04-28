@@ -1,7 +1,7 @@
-import HelloRecoil from "./components/HelloRecoil";
+import TodoList from "./components/TodoList";
 
 function App() {
-  return <HelloRecoil />;
+  return <TodoList />;
 }
 
 export default App;

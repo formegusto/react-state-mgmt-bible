@@ -1,12 +1,12 @@
 import React from "react";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 
-const textState = atom({
+const textState = atom<string>({
   key: "textState",
   default: "",
 });
 
-const charCountState = selector({
+const charCountState = selector<number>({
   key: "charCountState",
   get: ({ get }) => {
     const text = get(textState);
