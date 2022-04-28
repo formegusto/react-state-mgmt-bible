@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import todoListState from "../store/todos/atom";
+import { todoListState } from "../store/todos/atoms";
 import { Todo } from "../store/todos/types";
 
 type Props = {
