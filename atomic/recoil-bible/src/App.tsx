@@ -1,7 +1,7 @@
-import TodoList from "./components/TodoList";
+import AsyncEX from "./components/AsyncEX";
 
 function App() {
-  return <TodoList />;
+  return <AsyncEX />;
 }
 
 export default App;
