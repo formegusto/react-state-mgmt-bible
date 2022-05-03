@@ -1,7 +1,11 @@
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { currentPostIDState } from "../store/posts/atoms";
-import { getPostQuery, getPostsQuery } from "../store/posts/selectors";
+import {
+  getPostQuery,
+  getPostQueryByParam,
+  getPostsQuery,
+} from "../store/posts/selectors";
 
 function PostItem({ post }: any) {
   const setCurrentPostId = useSetRecoilState(currentPostIDState);
@@ -47,9 +51,26 @@ function CurrentPost() {
   );
 }
 
+type StaticProps = {
+  postId: number;
+};
+function StaticPost({ postId }: StaticProps) {
+  const post = useRecoilValue(getPostQueryByParam(postId));
+
+  return (
+    <div style={{ cursor: "pointer" }}>
+      <h1>{post.title}</h1>
+      <h3>{post.body}</h3>
+    </div>
+  );
+}
+
 function AsyncEX() {
   return (
     <div>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <StaticPost postId={1} />
+      </React.Suspense>
       <React.Suspense fallback={<div>Loading...</div>}>
         <PostList />
       </React.Suspense>
