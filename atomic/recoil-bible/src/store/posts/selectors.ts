@@ -1,7 +1,21 @@
-import { selector, selectorFamily } from "recoil";
+import { Loadable, selector, selectorFamily, waitForNone } from "recoil";
 import API from "../../api";
 import { currentPostIDState } from "./atoms";
 import { POST } from "./types";
+
+export const getConcurrentPostsQuery = selector<Loadable<POST>[]>({
+  key: "GetConcurrentPostQuery",
+  get: ({ get }) => {
+    const postList = get(getPostsQuery);
+    const posts = get(
+      waitForNone(postList.map((post) => getPostQueryByParam(post.id)))
+    );
+
+    return posts
+      .filter(({ state }) => state === "hasValue")
+      .map((post) => post);
+  },
+});
 
 export const getPostsQuery = selector<POST[]>({
   key: "GetPostsQuery",

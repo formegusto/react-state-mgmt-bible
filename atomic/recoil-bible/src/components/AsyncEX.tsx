@@ -2,6 +2,7 @@ import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { currentPostIDState } from "../store/posts/atoms";
 import {
+  getConcurrentPostsQuery,
   getPostQuery,
   getPostQueryByParam,
   getPostsQuery,
@@ -28,6 +29,18 @@ function PostList() {
     <ul>
       {postList.map((post) => (
         <PostItem key={post.id} post={post} />
+      ))}
+    </ul>
+  );
+}
+
+function ConcurrentPostList() {
+  const postList = useRecoilValue(getConcurrentPostsQuery);
+  console.log(postList);
+  return (
+    <ul>
+      {postList.map((post) => (
+        <PostItem key={post.contents.id} post={post.contents} />
       ))}
     </ul>
   );
@@ -73,6 +86,9 @@ function AsyncEX() {
       </React.Suspense>
       <React.Suspense fallback={<div>Loading...</div>}>
         <PostList />
+      </React.Suspense>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <ConcurrentPostList />
       </React.Suspense>
       <hr />
       <React.Suspense fallback={<div>Loading...</div>}>
