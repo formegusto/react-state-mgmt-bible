@@ -1,8 +1,10 @@
-import AsyncEX from "./components/AsyncEX";
+// import AsyncEX from "./components/AsyncEX";
+import PreFetchingEX from "./components/PreFetchingEX";
 // import ErrorBoundaryTest from "./components/ErrorBoundaryTest";
 
 function App() {
-  return <AsyncEX />;
+  return <PreFetchingEX />;
+  // return <AsyncEX />;
   // return <ErrorBoundaryTest />;
 }
 
