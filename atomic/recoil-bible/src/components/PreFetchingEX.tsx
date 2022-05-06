@@ -1,6 +1,5 @@
 import React from "react";
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from "recoil";
-import API from "../api";
 import { currentPostIDState } from "../store/posts/atoms";
 import {
   getPostQuery,
@@ -9,11 +8,11 @@ import {
 } from "../store/posts/selectors";
 
 function PostItem({ post }: any) {
-  const setCurrentPostId = useSetRecoilState(currentPostIDState);
+  //   const setCurrentPostId = useSetRecoilState(currentPostIDState);
 
-  const onSelect = React.useCallback(() => {
-    setCurrentPostId(post.id);
-  }, [post, setCurrentPostId]);
+  //   const onSelect = React.useCallback(() => {
+  //     setCurrentPostId(post.id);
+  //   }, [post, setCurrentPostId]);
 
   const onSelectPrefetching = useRecoilCallback(({ snapshot, set }) => () => {
     snapshot.getLoadable(getPostQueryByParam(post.id));
