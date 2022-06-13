@@ -1,5 +1,7 @@
+import QuickStart from "./2.Quick-Start";
+
 function App() {
-  return <></>;
+  return <QuickStart />;
 }
 
 export default App;
