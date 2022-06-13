@@ -1,7 +1,14 @@
 import { RecoilRoot } from "recoil";
+import CharacterCount from "./components/CharacterCount";
+import TextInput from "./components/TextInput";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <TextInput />
+      <CharacterCount />
+    </>
+  );
 }
 
 function QuickStart() {
