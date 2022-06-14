@@ -67,30 +67,58 @@ console.log(person.age);
 
 // Extending constructor (생성자 확장)
 // sup : super , base : child
+/*
+concept memo
+Object.getOwnPropertyDescriptor
+객체 프로퍼티의 데스크립터를 조회할 수 있다.
+(+) 프로퍼티 어트리뷰트
+*/
 function extend(sup: any, base: any): any {
-  const descriptor = Object.getOwnPropertyDescriptor(
-    base.prototype,
-    "constructor"
-  );
+  const descriptor: PropertyDescriptor | undefined =
+    Object.getOwnPropertyDescriptor(base.prototype, "constructor");
   base.prototype = Object.create(sup.prototype);
+
   const handler: ProxyHandler<any> = {
-    construct: function (target, args) {
+    // new 사용을 위한 프로퍼티
+    construct: function (target: Function, args) {
       var obj = Object.create(base.prototype);
+      // 1. 아 여기서 호출 하면
       this.apply!(target, obj, args);
       return obj;
     },
-    apply: function (target, that, args) {
+
+    // 함수 호출을 위한 프로퍼티
+    apply: function (target: Function, that, args) {
+      // 2. 여기로 들어감
+      // 3. 그러면 함수 Function이 첫 번째 매개변수로 thisArg가 붙는데,
+      // 4. 우리가 두 번째로 보내 준 확장하고 싶은 친구의 프로토타입이 붙는 거임 (that)
+      // 5. 그러면 sup 생성자가 호출되면서 this는 obj니까 args에 있는 값들이 obj에 붙고
+      // 6. 두번째, 확장하고 싶은 친구한테 붙는거지
       sup.apply(that, args);
       base.apply(that, args);
     },
   };
+
+  // 생성자 함수를 proxy로 교체해주는 거임
+  // 그러면 위에서 만든 proxy 객체 있잖아 걔가 construct 반환부에서
+  // 확장한 놈을 보내주는 거임
   const proxy = new Proxy(base, handler);
   descriptor!.value = proxy;
+
+  // 그렇게 변경한 propery descriptor를 반환
   Object.defineProperty(base.prototype, "constructor", descriptor!);
 
   return proxy;
 }
 
+/*
+concept memo
+생성자 함수
+
+new 키워드로 함수 호출 시,
+함수의 맨 상단에는 this = {}가 암시적으로 반영되고,
+return this가 반환된다.
+*/
 const Person = function (this: any, name: string) {
   this.name = name;
 };
@@ -98,9 +126,10 @@ const Person = function (this: any, name: string) {
 var Boy = extend(Person, function (this: any, name: string, age: Number) {
   this.age = age;
 });
-Boy.prototype.sex = "M";
+// Boy.prototype.sex = "M";
 
 const Peter = new Boy("Peter", 13);
-console.log(Peter.sex);
-console.log(Peter.name);
-console.log(Peter.age);
+console.log(Peter);
+// console.log(Peter.sex);
+// console.log(Peter.name);
+// console.log(Peter.age);
