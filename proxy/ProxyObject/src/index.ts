@@ -39,3 +39,68 @@ const p3 = new Proxy(target, {});
 
 p3.a = 37;
 console.log(target.a);
+
+// Validation (검증)
+const validator: ProxyHandler<any> = {
+  set: function (obj, prop, value) {
+    if (prop === "age") {
+      if (!Number.isInteger(value)) {
+        throw new TypeError("The age is not an integer");
+      }
+      if (value > 200) {
+        throw new RangeError("The age seems invalid");
+      }
+    }
+
+    obj[prop] = value;
+
+    // return false;
+    // TypeError: 'set' on proxy: trap returned falsish for property 'age'
+    return true;
+  },
+};
+const person: KeyObj = new Proxy({}, validator);
+person.age = 100;
+console.log(person.age);
+// person.age = "young"; // TypeError: The age is not an integer
+// person.age = 300; // RangeError: The age seems invalid
+
+// Extending constructor (생성자 확장)
+// sup : super , base : child
+function extend(sup: any, base: any): any {
+  const descriptor = Object.getOwnPropertyDescriptor(
+    base.prototype,
+    "constructor"
+  );
+  base.prototype = Object.create(sup.prototype);
+  const handler: ProxyHandler<any> = {
+    construct: function (target, args) {
+      var obj = Object.create(base.prototype);
+      this.apply!(target, obj, args);
+      return obj;
+    },
+    apply: function (target, that, args) {
+      sup.apply(that, args);
+      base.apply(that, args);
+    },
+  };
+  const proxy = new Proxy(base, handler);
+  descriptor!.value = proxy;
+  Object.defineProperty(base.prototype, "constructor", descriptor!);
+
+  return proxy;
+}
+
+const Person = function (this: any, name: string) {
+  this.name = name;
+};
+
+var Boy = extend(Person, function (this: any, name: string, age: Number) {
+  this.age = age;
+});
+Boy.prototype.sex = "M";
+
+const Peter = new Boy("Peter", 13);
+console.log(Peter.sex);
+console.log(Peter.name);
+console.log(Peter.age);
