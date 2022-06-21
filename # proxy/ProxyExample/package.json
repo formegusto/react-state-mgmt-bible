@@ -6,5 +6,8 @@
   "scripts": {
     "start": "node src"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "parcel": "^2.6.1"
+  }
 }
