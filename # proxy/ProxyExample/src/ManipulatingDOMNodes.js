@@ -21,8 +21,8 @@ let view = new Proxy(
 );
 
 let i1 = (view.selected = document.getElementById("item-1"));
-console.log(i1.getAttribute("aria-selected"));
+console.log(i1.getAttribute("aria-selected")); // true
 
 let i2 = (view.selected = document.getElementById("item-2"));
-console.log(i1.getAttribute("aria-selected"));
-console.log(i2.getAttribute("aria-selected"));
+console.log(i1.getAttribute("aria-selected")); // false
+console.log(i2.getAttribute("aria-selected")); // true
